@@ -1,0 +1,3 @@
+# mercstoria
+*/10 * * * * /usr/bin/php /home/mercstoria/task/quest.php 
+30 * * * * /usr/bin/php /home/mercstoria/task/login_bonus.php

@@ -1,0 +1,5 @@
+vendor/*
+data/*
+task/test.php
+config/config.php
+composer.phar
