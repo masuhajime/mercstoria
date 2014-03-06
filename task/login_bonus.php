@@ -8,5 +8,5 @@ main();
 function main()
 {
     $player = new \app\model\Player(CONFIG::APP_ID_1, CONFIG::APP_ID_2);
-    echo $player->loginBonus();
+    echo $player->loginBonus().PHP_EOL;
 }
