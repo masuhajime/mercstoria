@@ -18,13 +18,12 @@ class Player extends User
     public function questEnd(Quest $quest)
     {
         $options = [
-            'id' => $quest->getQuestId(),
-            'time' => "{$quest->getTime()}.".mt_rand(100, 999),
+            'time' => "{$quest->getTime()}.".mt_rand(10000, 99999),
         ];
         $query = http_build_query($options);
-        $client = $this->getClient();
-        $url = '/quests/result?'.$query;
+        $url = $quest->result_url.'&'.$query;
         \app\helper\Logger::info('quest end:'.$url, __LINE__, __FILE__);
+        $client = $this->getClient();
         $request = $client->post($url, null, array(
             '_method' => 'GET',
         ));
@@ -67,19 +66,20 @@ class Player extends User
     
     public function questStart(Quest $quest)
     {
+        //  http://toto.hekk.org/quests/execute/1.json?name=Quest&base=Quest/Quest&mode=quest&tipsLoading=true&id=1&difficulty_id=normal&party_id=001&unit_ids=1,2,3,4,5,6,7,10,13,14,17,25,41,43,44,48,54,57,61,66,68,71,75,
         $options = [
             'name' => 'Quest',
             'base' => 'Quest/Quest',
             'mode' => 'quest',
             'tipsLoading' => 'true',
             'id' => $quest->getQuestId(),
-            'difficulty_id' => 'normal',
+            'difficulty_id' => $quest->getDifficulty(),
             'party_id' => '001',
-            'unit_ids' => '1,2,3,4,5,6,7,10,13,14,17,44,83,93,94,163,164,165,170,171,172,173,177,178,179,181,182,184,189',
+            'unit_ids' => '1,2,3,4,5,6,7,10,13,14,17,25,41,43,44,48,54,57,61,66,68,71,75,',
         ];
         $query = http_build_query($options);
         $url = '/quests/execute/'.$quest->getQuestId().'.json?'.$query;
-        \app\helper\Logger::info('quest end:'.$url, __LINE__, __FILE__);
+        \app\helper\Logger::info('quest start:'.$url, __LINE__, __FILE__);
         $client = $this->getClient();
         $request = $client->post($url, null, array(
             '_method' => 'GET',
@@ -94,12 +94,35 @@ class Player extends User
         if (isset($json['user'])) {
             \app\helper\Logger::info('quest start success', __LINE__, __FILE__);
             $quest->setSucceedStart(true);
+            $quest->ap_use_url = $json['ap_use_url'];
+            $quest->result_url = $json['result_url'];
             return $quest;
         } else {
             \app\helper\Logger::warning('quest start failed', __LINE__, __FILE__);
             $quest->setSucceedStart(false);
             return $quest;
         }
+    }
+
+    public function questApUse(Quest $quest)
+    {
+        /*
+        $url = 'quests/ap_use';
+        $options = [
+            'id' => $quest->getQuestId(),
+            'difficulty_id' => $quest->getDifficulty(),
+        ];
+        $query = http_build_query($options);
+        $url = 'quests/ap_use?'.$query;
+         */
+        $url = $quest->ap_use_url;
+        \app\helper\Logger::info('ap use:'.$url, __LINE__, __FILE__);
+        $client = $this->getClient();
+        $request = $client->post($url, null, array(
+            '_method' => 'GET',
+        ));
+        $result = $request->send();
+        return $result->getBody();
     }
 
     public function loginBonus()

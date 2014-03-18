@@ -1,3 +1,4 @@
 # mercstoria
-*/10 * * * * /usr/bin/php /home/mercstoria/task/quest.php &>> /home/mercstoria/log
-30 * * * * /usr/bin/php /home/mercstoria/task/login_bonus.php &>> /home/mercstoria/log
+*/5 * * * * /usr/bin/php /home/mercstoria/task/quest.php &>> /home/mercstoria/log 
+0,30 * * * * /usr/bin/php /home/mercstoria/task/login_bonus.php &>> /home/mercstoria/log
+

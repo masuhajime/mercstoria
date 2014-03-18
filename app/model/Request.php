@@ -10,7 +10,7 @@ class Request {
     {
         $client = new Client('http://toto.hekk.org/');
         $client->setDefaultOption('headers', [
-            'User-Agent'        => 'toto/1.0.2 CFNetwork/672.0.8 Darwin/14.0.0',
+            'User-Agent'        => 'toto/1.0.3 CFNetwork/672.1.13 Darwin/14.0.0',
             'APP_ID_1'          => $APP_ID_1,
             'Accept-Language'   => 'ja-jp',
             'Accept-Encoding'   => 'gzip, deflate',
@@ -20,7 +20,7 @@ class Request {
             'Content-Type'      => 'application/x-www-form-urlencoded',
             'DEVICE_INFO'       => 'iPhone4,1:::iPhone OS 7.0.6',
             'Connection'        => 'keep-alive',
-            'AppVersion'        => '3',
+            'AppVersion'        => '4',
         ]);
         $client->getConfig()->set('request.params', array(
             'redirect.strict' => true,

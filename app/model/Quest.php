@@ -8,6 +8,11 @@ class Quest
     private $success_start = null;
     private $success_end = null;
     private $time = null;
+    private $difficulty = null;
+    
+    // めんどくさくなった
+    public $ap_use_url = null;
+    public $result_url = null;
     
     public function __construct($quest_id) {
         $this->quest_id = $quest_id;
@@ -15,6 +20,9 @@ class Quest
     
     public function setTime($int) {$this->time = $int;}
     public function getTime() {return $this->time;}
+    
+    public function setDifficulty($difficulty) {$this->difficulty = $difficulty;}
+    public function getDifficulty() {return $this->difficulty;}
     
     public function getQuestId(){return $this->quest_id;}
     public function setSucceedStart($bool) {$this->success_start = $bool;}
