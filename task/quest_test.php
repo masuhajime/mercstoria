@@ -36,7 +36,6 @@ function main()
                 $quest = new \app\model\Quest(32);
                 $quest->setDifficulty('very_hard');
             } else {
-                $queued_quest = true;
                 $quest_setting = $queue->get();
                 Logger::info("queued quest start:{$quest_setting["id"]}:{$quest_setting["difficulty"]}");
                 $quest = new \app\model\Quest($quest_setting['id']);
@@ -46,24 +45,9 @@ function main()
             //$quest->setDifficulty('very_hard');
             break;
     }
-    $quest->setTime(mt_rand(200, 230));
-    
     $player = new \app\model\Player(CONFIG::APP_ID_1, CONFIG::APP_ID_2);
-    if (true) {// quest start
-        $quest = $player->questStart($quest);
-        if (!$quest->isSucceedStart()) {
-            return false;
-        }
-        sleep(3);
-        $player->questApUse($quest);
-        Logger::info("sleep: {$quest->getTime()}sec");
-        sleep($quest->getTime());
-    }
-    $quest = $player->questEnd($quest);
-    
-    if ($quest->isSucceedEnd() && isset($queued_quest) && $queued_quest === true) {
-        $quest_setting = $queue->pop();
-        Logger::info("queued quest finished:{$quest_setting["id"]}:{$quest_setting["difficulty"]}");
-    }
+    $quest = $player->questStart($quest);
+    Logger::info('ap_use:'.$quest->ap_use_url);
+    Logger::info('result:'.$quest->result_url);
     Logger::info('end');
 }

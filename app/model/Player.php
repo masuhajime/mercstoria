@@ -67,6 +67,7 @@ class Player extends User
     public function questStart(Quest $quest)
     {
         //  http://toto.hekk.org/quests/execute/1.json?name=Quest&base=Quest/Quest&mode=quest&tipsLoading=true&id=1&difficulty_id=normal&party_id=001&unit_ids=1,2,3,4,5,6,7,10,13,14,17,25,41,43,44,48,54,57,61,66,68,71,75,
+        // &fever_drop_rate_ok=true
         $options = [
             'name' => 'Quest',
             'base' => 'Quest/Quest',
@@ -76,6 +77,7 @@ class Player extends User
             'difficulty_id' => $quest->getDifficulty(),
             'party_id' => '001',
             'unit_ids' => '1,2,3,4,5,6,7,10,13,14,17,25,41,43,44,48,54,57,61,66,68,71,75,',
+            'fever_drop_rate_ok' => 'true',//文字列で送信しているため
         ];
         $query = http_build_query($options);
         $url = '/quests/execute/'.$quest->getQuestId().'.json?'.$query;
