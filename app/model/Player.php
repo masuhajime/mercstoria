@@ -139,6 +139,110 @@ class Player extends User
         $result = $request->send();
         return $result->getBody();
     }
+
+    public function battleHelp()
+    {
+        // POST Full request URI: http://toto.hekk.org/users/receive_login_bonus
+        $url = '/battles/help';
+        \app\helper\Logger::info('battle help:'.$url, __LINE__, __FILE__);
+        $client = $this->getClient();
+        $request = $client->post($url, null, array(
+            '_method' => 'GET',
+        ));
+        $result = $request->send();
+        return $result->getBody();
+    }
+
+    public function getGuildsBattleStatus()
+    {
+        $url = '/guilds/battle_condition';
+        \app\helper\Logger::info('guilds:'.$url, __LINE__, __FILE__);
+        $client = $this->getClient();
+        $request = $client->post($url, null, array(
+            '_method' => 'GET',
+        ));
+        $result = $request->send();
+        $json = json_decode($result->getBody(), true);
+        if (is_null($json)) {
+            throw new \RuntimeException("111");
+        }
+        return $json['data']['battle_condition']['guilds'];
+    }
+
+    public function getBattleExecute($guild_id)
+    {
+        // POST /battles/guild_quest_execute.json?
+        // name=Quest&
+        // base=Quest/Quest&
+        // mode=battle&
+        // tipsLoading=true&
+        // guild_id=d272d3c4-8dff-11e3-9ee4-00b6b314b725&
+        // difficulty_id=normal&
+        // party_id=001&
+        // unit_ids=8,17,18,19,20,22,23,24,25,26,27,28,29,30,31,32,33,34,36,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,59,60,61,63,64,66,67,68,70,71,72,74,75,76,77,78,79,80,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,102,104,109,130,147,232,233,244,245,276&
+        // page_message=name%3dQuest%26base%3dQuest%2fQuest%26mode%3dbattle%26tipsLoading%3dtrue%26guild_id%3dd272d3c4-8dff-11e3-9ee4-00b6b314b725%26difficulty_id%3dnormal%26party_id%3d001%26unit_ids%3d8%2c17%2c18%2c19%2c20%2c22%2c23%2c24%2c25%2c26%2c27%2c28%2c29%2c30%2c31%2c32%2c33%2c34%2c36%2c38%2c39%2c40%2c41%2c42%2c43%2c44%2c45%2c46%2c47%2c48%2c49%2c50%2c51%2c52%2c53%2c54%2c55%2c56%2c57%2c59%2c60%2c61%2c63%2c64%2c66%2c67%2c68%2c70%2c71%2c72%2c74%2c75%2c76%2c77%2c78%2c79%2c80%2c82%2c83%2c84%2c85%2c86%2c87%2c88%2c89%2c90%2c91%2c92%2c93%2c94%2c95%2c96%2c102%2c104%2c109%2c130%2c147%2c232%2c233%2c244%2c245%2c276
+        $options = [
+            'name' => 'Quest',
+            'base' => 'Quest/Quest',
+            'mode' => 'battle',
+            'tipsLoading' => 'true',
+            'guild_id' => $guild_id,
+            'party_id' => '001',
+            'difficulty_id' => 'very_hard',
+            'unit_ids' => '1,2,3,4,5,6,7,10,13,14,17,25,41,43,44,48,54,57,61,66,68,71,75,',
+        ];
+        $query = http_build_query($options);
+        $url = '/battles/guild_quest_execute.json?'.$query;
+        \app\helper\Logger::info('battle start:'.$url, __LINE__, __FILE__);
+        $client = $this->getClient();
+        $request = $client->post($url, null, array(
+            '_method' => 'GET',
+        ));
+        $result = $request->send();
+        $json = json_decode($result->getBody(), true);
+        if (is_null($json)) {
+            \app\helper\Logger::warning('battle start failed', __LINE__, __FILE__);
+            throw new \RuntimeException('battle start failed');
+        }
+        return [$json['ap_use_url'], $json['result_url']];
+    }
+    
+    public function battleBpUse($url)
+    {
+        \app\helper\Logger::info('battle bp use:'.$url, __LINE__, __FILE__);
+        $client = $this->getClient();
+        $request = $client->post($url, null, array(
+            '_method' => 'GET',
+        ));
+        $result = $request->send();
+        $json = json_decode($result->getBody(), true);
+        if (is_null($json)) {
+            \app\helper\Logger::warning('bp use failed', __LINE__, __FILE__);
+            throw new \RuntimeException('bp use failed');
+        }
+        return $json;
+    }
+    
+    public function battleResult($url, $time)
+    {
+        $options = [
+            'time' => "{$time}.".mt_rand(1000, 9999),
+        ];
+        $query = http_build_query($options);
+        $url = $url.'&'.$query;
+        \app\helper\Logger::info('battle bp use:'.$url, __LINE__, __FILE__);
+        $client = $this->getClient();
+        $request = $client->post($url, null, array(
+            '_method' => 'GET',
+        ));
+        $result = $request->send();
+        $json = json_decode($result->getBody(), true);
+        if (is_null($json)) {
+            \app\helper\Logger::warning('bp use failed', __LINE__, __FILE__);
+            throw new \RuntimeException('bp use failed');
+        }
+        return $json;
+    }
     
     // 途中
     public function getStatus()

@@ -20,7 +20,7 @@ class Request {
             'Content-Type'      => 'application/x-www-form-urlencoded',
             'DEVICE_INFO'       => 'iPhone4,1:::iPhone OS 7.0.6',
             'Connection'        => 'keep-alive',
-            'AppVersion'        => '4',
+            'AppVersion'        => '7',
         ]);
         $client->getConfig()->set('request.params', array(
             'redirect.strict' => true,

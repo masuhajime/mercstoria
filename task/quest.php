@@ -33,7 +33,7 @@ function main()
         case 5: 
             $queue = new \app\model\queue\QuestQueue($queue_file);
             if (!$queue->hasQuest()) {
-                $quest = new \app\model\Quest(32);
+                $quest = new \app\model\Quest(79);
                 $quest->setDifficulty('very_hard');
             } else {
                 $queued_quest = true;
